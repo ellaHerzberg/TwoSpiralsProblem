@@ -4,15 +4,17 @@ import activation_functions
 class Layer(object):
     def __init__(self, weights, activation):
         self.weights = weights
-        self.activation = None
-        self.set_active_func(activation)
+        self.activation = self.set_active_func(activation)
+        self.output = 0
 
     def set_active_func(self, activation):
         if activation == "relu":
-            self.activation = activation_functions.relu
+            return activation_functions.relu
         elif activation == "tanh":
-            self.activation = activation_functions.tanh
+            return activation_functions.tanh
         elif activation == "drelu":
-            self.activation = activation_functions.drelu()
+            return activation_functions.drelu
+        elif activation == "linear":
+            return activation_functions.linear
         else:
-            self.activation = activation_functions.sigmoid
+            return activation_functions.sigmoid
