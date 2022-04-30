@@ -5,7 +5,7 @@ import numpy as np
 class Network(object):
     def __init__(self, input_size, eta):
         self.eta = eta
-        self.layers = [Layer(2, "sigmoid")]
+        self.layers = [Layer(input_size, "sigmoid")]
         self.layers[0].nodes = np.random.uniform(-1, 1, input_size)
 
     def add_layer(self, n_new_nodes, activation):
@@ -23,7 +23,7 @@ class Network(object):
     def predict(self, inputs):
         self.layers[0].nodes = inputs
 
-        for l in range(2):
+        for l in range(len(self.layers) - 1):
             old_layer = self.layers[l]
             new_layer = self.layers[l + 1]
 
