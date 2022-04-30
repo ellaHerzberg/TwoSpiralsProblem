@@ -7,7 +7,7 @@ LINEAR =  "linear"
 SIGMOID = "sigmoid"
 
 # main
-LEARNING_LOOPS = 30
+LEARNING_LOOPS = 50
 EPOCH_SIZE = 10
 
 # network params
