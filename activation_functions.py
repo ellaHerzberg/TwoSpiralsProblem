@@ -1,25 +1,22 @@
 import numpy as np
 
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+class Linear(object):
+    def __init__(self):
+        self.activation = lambda x : x
+        self.derivative = lambda x : 1
 
+class Sigmoid(object):
+    def __init__(self):
+        self.activation = lambda x : 1 / (1 + np.exp(-x))
+        self.derivative = lambda x : x * (1 - x)
 
-def sigmoid_derivative(x):
-    return x * (1 - x)
-
-
-def relu(x):
-    return x * (x > 0)
-
-
-def drelu(x):
-    return 1. * (x > 0)
-
+class Relu(object):
+    def __init__(self):
+        self.activation = lambda x : x * (x > 0)
+        self.derivative = lambda x : 1. * (x > 0)
 
 def tanh(x):
     return np.tanh(x)
 
-def linear(x):
-    return x
 

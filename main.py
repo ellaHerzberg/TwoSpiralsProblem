@@ -9,7 +9,7 @@ def main():
     prediction_percentage = []
 
     net = Network(INPUT_SIZE, ETA, SIGMOID)
-    net.add_layer(30, LINEAR)
+    net.add_layer(3, LINEAR)
     net.add_layer(1, LINEAR)
 
     # Open Training data
