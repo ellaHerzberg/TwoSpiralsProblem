@@ -6,7 +6,7 @@ class Layer(object):
         self.weights = weights
         self.activation = self.set_active_func(activation)
         self.output = 0
-
+#1112
     def set_active_func(self, activation):
         if activation == "relu":
             return activation_functions.relu
