@@ -1,5 +1,5 @@
 import activation_functions
-import numpy as np
+from constants import *
 
 
 class Layer(object):
@@ -11,13 +11,13 @@ class Layer(object):
         self.output = 0
 
     def _set_active_func(self, activation):
-        if activation == "relu":
+        if activation == RELU:
             return activation_functions.relu
-        elif activation == "tanh":
+        elif activation == TANH:
             return activation_functions.tanh
-        elif activation == "drelu":
+        elif activation == DRULU:
             return activation_functions.drelu
-        elif activation == "linear":
+        elif activation == LINEAR:
             return activation_functions.linear
         else:
             return activation_functions.sigmoid
