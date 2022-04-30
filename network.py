@@ -1,6 +1,7 @@
 from layer import Layer
 import numpy as np
 from constants import ETA
+import math
 
 
 class Network(object):
@@ -11,10 +12,10 @@ class Network(object):
 
     def add_layer(self, n_new_nodes, activ_func):
         last_layer = self.layers[-1]
-        random_weights = []
+        random_weights = np.array([[]])
         for i in range(n_new_nodes):
             node_random_weights = np.random.uniform(-1, 1, last_layer.n_nodes)
-            random_weights.append(node_random_weights)
+            random_weights = np.append(random_weights, node_random_weights)
         last_layer.weights = random_weights
         self.layers.append(Layer(n_new_nodes, activ_func))
 
@@ -28,16 +29,17 @@ class Network(object):
             old_layer = self.layers[l]
             new_layer = self.layers[l + 1]
 
-            new_layer_nodes = []
-            new_layer_d_nodes = []
+            new_layer_nodes = np.array([])
+            new_layer_d_nodes = np.array([])
             for i in range(new_layer.n_nodes):
                 curr_node = 0
                 curr_d_node = 0
                 for j in range(old_layer.n_nodes):
-                    curr_node += old_layer.activ_func.activation(old_layer.weights[i][j] * old_layer.nodes[j])
+                    curr_culc = old_layer.activ_func.activation(old_layer.weights[i][j] * old_layer.nodes[j])
+                    curr_node += curr_culc
                     curr_d_node += old_layer.activ_func.derivative(old_layer.weights[i][j] * old_layer.nodes[j])
-                new_layer_nodes.append(curr_node)
-                new_layer_d_nodes.append(curr_d_node)
+                new_layer_nodes = np.append(new_layer_nodes, curr_node)
+                new_layer_d_nodes = np.append(new_layer_d_nodes, curr_d_node)
             new_layer.nodes = new_layer_nodes
             new_layer.d_nodes = new_layer_d_nodes
 
@@ -53,9 +55,19 @@ class Network(object):
 
             curr_layer = self.layers[l]
             next_layer = self.layers[l - 1]
+            tmp = next_layer.weights * last_delta
+            curr_delta = np.array([curr_layer.d_nodes]).transpose() * tmp
+            curr_d_weights = next_layer.nodes * curr_delta * -ETA
 
-            curr_delta = np.multiply(np.multiply(last_delta, curr_layer.weights), curr_layer.nodes)
-            curr_d_weights = np.multiply(np.array([next_layer.nodes]).transpose(), curr_delta) * -ETA
+            self.layers[l - 1].weights = self.layers[l - 1].weights + curr_d_weights
+            last_delta = curr_delta.transpose()
+
+            #
+            # for i in range(len(curr_d_weights)):
+            #     for j in range(len(curr_d_weights[i])):
+            #         if math.isinf(curr_d_weights[i][j]):
+            #             pass
+
 
             # # Compute delta
             # next_delta = last_delta * curr_layer.activ_func.derivative(curr_layer)
@@ -67,4 +79,3 @@ class Network(object):
             # dW = np.multiply(np.array(inputs).reshape(len(inputs), 1), -self.eta * delta1)
 
             # Update weights
-            self.layers[l - 1].weights = np.add(self.layers[0].weights, curr_d_weights.transpose())

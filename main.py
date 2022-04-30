@@ -5,11 +5,17 @@ from check_network import check_network
 from constants import *
 from visualize import *
 
+
+LEARNING_LOOPS = 30
+EPOCH_SIZE = 10
+ETA = 0.001
+
 def main():
     prediction_percentage = []
 
     net = Network(INPUT_SIZE, ETA, SIGMOID)
     net.add_layer(3, LINEAR)
+    net.add_layer(4, LINEAR)
     net.add_layer(1, LINEAR)
 
     # Open Training data

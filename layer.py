@@ -1,3 +1,5 @@
+import numpy as np
+
 from activation_functions import Linear, Sigmoid, Relu
 from constants import *
 
@@ -5,9 +7,9 @@ from constants import *
 class Layer(object):
     def __init__(self, n_nodes, activ_func):
         self.n_nodes = n_nodes
-        self.nodes = []
-        self.d_nodes = []
-        self.weights = []
+        self.nodes = np.array([])
+        self.d_nodes = np.array([])
+        self.weights = np.array([])
         self.activ_func = self._set_active_func(activ_func)
         self.output = 0
 
