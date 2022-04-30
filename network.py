@@ -14,6 +14,7 @@ class Network(object):
         layer = Layer(random_weights, activation)
         self.hidden_layers.append(layer)
 
+    # should be in Layer?
     def compute_error(self, inputs, teacher_answer):
         return self.predict(inputs) - teacher_answer
 
@@ -25,7 +26,6 @@ class Network(object):
                 node_output += self.input_layer.activation(input_node * w)
             first_output.append(node_output)
         self.input_layer.output = first_output
-
 
         output = 0
         for i in range(len(first_output)):
