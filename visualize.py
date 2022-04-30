@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 from constants import *
 
 
-def visualize(data, net):
+def visualize(data, net, prediction_percentage):
     """
     plot the received data
+    :param net: the network we train
+    :param prediction_percentage
     :param data: data to plot
     :return: none
     """
@@ -32,4 +34,5 @@ def visualize(data, net):
 
     plt.scatter(x_array_zero, y_array_zero, color=PINK)
     plt.scatter(x_array_one, y_array_one, color=GREEN)
+    plt.title("prediction:" + str(prediction_percentage))
     plt.show()

@@ -24,7 +24,8 @@ def main():
         train_network(train_data, net)
         check_network(net, prediction_percentage, validation_data, i)
 
-    visualize(validation_data, net)
+    last_epoch = sum(prediction_percentage[-EPOCH_SIZE:]) / len(prediction_percentage[-EPOCH_SIZE:])
+    visualize(validation_data, net, last_epoch)
 
 
 def train_network(train_data, net):
