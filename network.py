@@ -3,9 +3,9 @@ import numpy as np
 
 
 class Network(object):
-    def __init__(self, input_size, eta):
+    def __init__(self, input_size, eta, first_activation):
         self.eta = eta
-        self.layers = [Layer(input_size, "sigmoid")]
+        self.layers = [Layer(input_size, first_activation)]
         self.layers[0].nodes = np.random.uniform(-1, 1, input_size)
 
     def add_layer(self, n_new_nodes, activation):

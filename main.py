@@ -9,8 +9,8 @@ from constants import *
 
 prediction_percentage = []
 
-net = Network(INPUT_SIZE, ETA)
-net.add_layer(30, LINEAR)
+net = Network(INPUT_SIZE, ETA, LINEAR)
+net.add_layer(30, SIGMOID)
 net.add_layer(1, LINEAR)
 
 # Open Training data
@@ -29,7 +29,10 @@ for i in range(LEARNING_LOOPS):
         y = float(y)
         teacher = int(teacher[0])
         net.update_weights([x, y], teacher)
+        
     check_network(net, prediction_percentage, validation_data, i)
+
+
 # visualize last run
 x_array_zero = np.array([])
 x_array_one = np.array([])
