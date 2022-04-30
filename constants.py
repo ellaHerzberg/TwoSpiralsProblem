@@ -17,3 +17,7 @@ INPUT_SIZE = 2
 # data
 DATA_TRAIN_PATH = "./src/DATA_TRAIN.csv"
 DATA_VALID_PATH = "./src/DATA_valid.csv"
+
+# visualization colors
+PINK = '#e619ae'
+GREEN = '#AEE619'

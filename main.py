@@ -1,11 +1,8 @@
 # using python 3.8
-
-import matplotlib.pyplot as plt
-import numpy as np
 from network import Network
 from random import shuffle
 from constants import *
-
+from visualize import *
 
 prediction_percentage = []
 
@@ -69,26 +66,5 @@ for i in range(LEARNING_LOOPS):
         curr_epoch = prediction_percentage[-EPOCH_SIZE:]
         print("Epoch {epoch_n} had prediction of {epoch_pred:.2f}".format(epoch_n=(i / EPOCH_SIZE), epoch_pred=(sum(curr_epoch) / len(curr_epoch))))
 
-# visualize last run
-x_array_zero = np.array([])
-x_array_one = np.array([])
-y_array_zero = np.array([])
-y_array_one = np.array([])
-for r in validation_data:
-    x, y, teacher = r.split(',')
-    x = float(x)
-    y = float(y)
-    teacher = int(teacher[0])
 
-    ans = round(net.predict([x, y]))
-    # create vectors for visualization
-    if ans == 0:
-        x_array_zero = np.append(x_array_zero, x)
-        y_array_zero = np.append(y_array_zero, y)
-    if ans == 1:
-        x_array_one = np.append(x_array_one, x)
-        y_array_one = np.append(y_array_one, y)
-
-plt.scatter(x_array_zero, y_array_zero, color='#e619ae')
-plt.scatter(x_array_one, y_array_one, color='#AEE619')
-plt.show()
+visualize(validation_data)
