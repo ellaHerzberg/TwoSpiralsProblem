@@ -6,7 +6,8 @@ import matplotlib
 from network import Network
 
 
-net = Network(2, 0.1)
+net = Network(2, 0.01)
 net.add_layer(3, "linear")
-print(net.compute_error([0, 1], 0))
+net.add_layer(1, "linear")
+
 net.update_weights([0, 1], 0)

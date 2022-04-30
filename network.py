@@ -3,48 +3,56 @@ import numpy as np
 
 
 class Network(object):
-    def __init__(self, input_size, learning_rate):
-        self.input_layer = Layer(np.random.uniform(-1, 1, input_size), "sigmoid")
-        self.hidden_layers = []
+    def __init__(self, input_size, eta):
+        self.eta = eta
+        self.layers = [Layer(2, "sigmoid")]
+        self.layers[0].nodes = np.random.uniform(-1, 1, input_size)
 
-        self.learning_rate = learning_rate
+    def add_layer(self, n_new_nodes, activation):
+        last_layer = self.layers[-1]
+        random_weights = []
+        for i in range(n_new_nodes):
+            node_random_weights = np.random.uniform(-1, 1, last_layer.n_nodes)
+            random_weights.append(node_random_weights)
+        last_layer.weights = random_weights
+        self.layers.append(Layer(n_new_nodes, activation))
 
-    def add_layer(self, num_of_nodes, activation):
-        random_weights = np.random.uniform(-1, 1, num_of_nodes)
-        layer = Layer(random_weights, activation)
-        self.hidden_layers.append(layer)
-
-    # should be in Layer?
     def compute_error(self, inputs, teacher_answer):
         return self.predict(inputs) - teacher_answer
 
     def predict(self, inputs):
-        first_output = []
-        for w in self.input_layer.weights:
-            node_output = 0
-            for input_node in inputs:
-                node_output += self.input_layer.activation(input_node * w)
-            first_output.append(node_output)
-        self.input_layer.output = first_output
+        self.layers[0].nodes = inputs
 
-        output = 0
-        for i in range(len(first_output)):
-            output += first_output[i] * self.hidden_layers[0].weights[i]
+        for l in range(2):
+            old_layer = self.layers[l]
+            new_layer = self.layers[l + 1]
 
-        return output
+            new_layer_nodes = []
+            for i in range(new_layer.n_nodes):
+                curr_node = 0
+                for j in range(old_layer.n_nodes):
+                    curr_node += old_layer.activation(old_layer.weights[i][j] * old_layer.nodes[j])
+                new_layer_nodes.append(curr_node)
+            new_layer.nodes = new_layer_nodes
+
+        return self.layers[-1].nodes[0]
 
     def update_weights(self, inputs, teacher_answer):
+        # Not generic at all. #TODO: Make it generic
+
+        W = self.layers[0].weights
+        J = self.layers[1].weights
+        error = self.compute_error(inputs, teacher_answer)
 
         # Compute deltas
-        delta2 = self.compute_error(inputs, teacher_answer) * 1
-        J = self.hidden_layers[0].weights
-        # Specifically for Sigmoid
-        h = self.input_layer.output
-        dJ = np.multiply(h, -self.learning_rate * delta2)
-        hp = np.multiply(self.input_layer.output, np.subtract(1, h))
-        delta1 = np.multiply(hp, delta2 * J)
-        dW = np.multiply(inputs, -self.learning_rate * delta1)
+        delta2 = error * 1
+        h = self.layers[1].nodes
+        dJ = np.multiply(h, -self.eta * delta2)
+
+        hp = np.multiply(h, np.subtract(1, h))
+        delta1 = np.multiply(hp, np.multiply(J, delta2))
+        dW = np.multiply(np.array(inputs).reshape(len(inputs), 1), -self.eta * delta1)
 
         # Update weights
-        self.hidden_layers[0].weights = np.add(self.hidden_layers[0].weights, dJ)
-        self.input_layer.weights = np.add(self.input_layer.weights, dW)
+        self.layers[1].weights = np.add(self.layers[1].weights, dJ)
+        self.layers[0].weights = np.add(self.layers[0].weights, dW.transpose())
