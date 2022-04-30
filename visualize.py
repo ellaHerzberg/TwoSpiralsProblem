@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from constants import *
 
 
-def visualize(data):
+def visualize(data, net):
     """
     plot the received data
     :param data: data to plot
