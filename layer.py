@@ -1,6 +1,6 @@
 import numpy as np
 
-from activation_functions import Relu, Sigmoid, Sin
+from activation_functions import Relu, Sigmoid, Sin, Tanh, Linear
 from constants import *
 
 
@@ -20,3 +20,7 @@ class Layer(object):
             return Sigmoid()
         elif activ_func == RELU:
             return Relu()
+        elif activ_func == TANH:
+            return Tanh()
+        elif activ_func == LINEAR:
+            return Linear()

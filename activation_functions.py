@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 
@@ -39,6 +41,7 @@ class Relu(object):
         """
         return Z > 0
 
+
 class Sin(object):
     @staticmethod
     def activation(Z):
@@ -47,7 +50,8 @@ class Sin(object):
         :param Z: np.array, numbers to calculatete thr Sin result on.
         :return: np.array, Sin result.
         """
-        return np.ravel([np.sin(val) for val in np.ravel(Z)])[np.newaxis].T
+        # return np.ravel([np.sin(val) for val in np.ravel(Z)])[np.newaxis].T
+        return math.sin(Z)
 
     @staticmethod
     def derivative(Z):
@@ -56,7 +60,9 @@ class Sin(object):
         :param Z: np.array, numbers to calculate thr Sin derivative result on.
         :return: np.array, Sin derivative result.
         """
-        return np.ravel([np.cos(val) for val in np.ravel(Z)])[np.newaxis].T
+        # return np.ravel([np.cos(val) for val in np.ravel(Z)])[np.newaxis].T
+        return math.cos(Z)
+
 
 class Sigmoid(object):
     @staticmethod
@@ -75,3 +81,43 @@ class Sigmoid(object):
         :return: np.array, Sigmoid derivative result.
         """
         return self.activation(Z) * (1 - self.activation(Z))
+
+class Tanh(object):
+    @staticmethod
+    def activation(Z):
+        """
+        This function is the Tanh function.
+        :param Z: np.array, numbers to calculate thr Tanh result on.
+        :return: np.array, Tanh result.
+        """
+        # e = np.exp(Z)
+        # e_m = np.exp(-Z)
+        # return (e-e_m)/(e+e_m)  # (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z))
+        return np.tanh(Z)
+
+    def derivative(self, Z):
+        """
+        This function is the Tanh derivative function.
+        :param Z: np.array, numbers to calculate thr Tanh derivative result on.
+        :return: np.array, Tanh derivative result.
+        """
+        return 1-self.activation(Z) ** 2
+
+
+class Linear(object):
+    @staticmethod
+    def activation(Z):
+        """
+        This function is the Linear function.
+        :param Z: np.array, numbers to calculate thr Linear result on.
+        :return: np.array, Linear result.
+        """
+        return Z
+
+    def derivative(self, Z):
+        """
+        This function is the Linear derivative function.
+        :param Z: np.array, numbers to calculate thr Linear derivative result on.
+        :return: np.array, Linear derivative result.
+        """
+        return 1
