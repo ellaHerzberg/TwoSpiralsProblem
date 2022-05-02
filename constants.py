@@ -3,15 +3,17 @@
 RELU = "relu"
 TANH = "tanh"
 DRULU = "drelu"
-LINEAR =  "linear"
+LINEAR = "linear"
 SIGMOID = "sigmoid"
+SIN = "sin"
+
 
 # main
-LEARNING_LOOPS = 50
-EPOCH_SIZE = 10
+LEARNING_LOOPS = 20
+EPOCH_SIZE = 2
 
 # network params
-ETA = 0.001
+ETA = 0.0001
 INPUT_SIZE = 2
 
 # data

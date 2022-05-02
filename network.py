@@ -8,14 +8,14 @@ class Network(object):
     def __init__(self, input_size, eta, first_activation):
         self.eta = eta
         self.layers = [Layer(input_size, first_activation)]
-        self.layers[0].nodes = np.random.uniform(-1, 1, input_size)
+        # self.layers[0].nodes = np.random.uniform(-1, 1, input_size)
 
     def add_layer(self, n_new_nodes, activ_func):
         last_layer = self.layers[-1]
-        random_weights = np.array([[]])
-        for i in range(n_new_nodes):
-            node_random_weights = np.random.uniform(-1, 1, last_layer.n_nodes)
-            random_weights = np.append(random_weights, node_random_weights)
+        random_weights = np.array([np.random.uniform(-1, 1, last_layer.n_nodes)])
+        for i in range(n_new_nodes - 1):
+            node_random_weights = np.array([np.random.uniform(-1, 1, last_layer.n_nodes)])
+            random_weights = np.append(random_weights, node_random_weights, axis=0)
         last_layer.weights = random_weights
         self.layers.append(Layer(n_new_nodes, activ_func))
 
@@ -35,7 +35,7 @@ class Network(object):
                 curr_node = 0
                 curr_d_node = 0
                 for j in range(old_layer.n_nodes):
-                    curr_culc = old_layer.activ_func.activation(old_layer.weights[i][j] * old_layer.nodes[j])
+                    curr_culc = old_layer.activ_func.activation(old_layer.weights.item(i, j) * old_layer.nodes[j])
                     curr_node += curr_culc
                     curr_d_node += old_layer.activ_func.derivative(old_layer.weights[i][j] * old_layer.nodes[j])
                 new_layer_nodes = np.append(new_layer_nodes, curr_node)
@@ -46,23 +46,23 @@ class Network(object):
         return self.layers[-1].nodes[0]
 
     def update_weights(self, inputs, teacher_answer):
-        error = self.compute_error(inputs, teacher_answer)
-        last_delta = error * self.layers[-1].d_nodes[0]
-        last_d_weights = np.multiply(self.layers[-2].nodes, (last_delta * -ETA))
-        self.layers[-2].weights = np.add(self.layers[-2].weights, last_d_weights)
+        self.predict(inputs)
+        last_delta = self.layers[-1].nodes[0] - teacher_answer  # * self.layers[-1].d_nodes[0]
+        last_d_weights = self.layers[-2].nodes * last_delta
+        self.layers[-2].weights = np.add(self.layers[-2].weights, last_d_weights * -ETA)
 
         for l in range(len(self.layers) - 2, 0, -1):
 
             curr_layer = self.layers[l]
             next_layer = self.layers[l - 1]
             tmp = next_layer.weights * last_delta
-            curr_delta = np.array([curr_layer.d_nodes]).transpose() * tmp
-            curr_d_weights = next_layer.nodes * curr_delta * -ETA
+            curr_delta = np.matmul(np.array([curr_layer.d_nodes]), tmp)
+            curr_d_weights = next_layer.nodes * curr_delta
 
-            self.layers[l - 1].weights = self.layers[l - 1].weights + curr_d_weights
+            self.layers[l - 1].weights = self.layers[l - 1].weights + curr_d_weights * -ETA
             last_delta = curr_delta.transpose()
+        pass
 
-            #
             # for i in range(len(curr_d_weights)):
             #     for j in range(len(curr_d_weights[i])):
             #         if math.isinf(curr_d_weights[i][j]):

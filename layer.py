@@ -1,6 +1,6 @@
 import numpy as np
 
-from activation_functions import Linear, Sigmoid, Relu
+from activation_functions import Relu, Sigmoid, Sin
 from constants import *
 
 
@@ -14,8 +14,8 @@ class Layer(object):
         self.output = 0
 
     def _set_active_func(self, activ_func):
-        if activ_func == LINEAR:
-            return Linear()
+        if activ_func == SIN:
+            return Sin()
         elif activ_func == SIGMOID:
             return Sigmoid()
         elif activ_func == RELU:

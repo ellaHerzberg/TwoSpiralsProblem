@@ -2,21 +2,16 @@
 from network import Network
 from random import shuffle
 from check_network import check_network
-from constants import *
 from visualize import *
 
-
-LEARNING_LOOPS = 30
-EPOCH_SIZE = 10
-ETA = 0.001
 
 def main():
     prediction_percentage = []
 
-    net = Network(INPUT_SIZE, ETA, SIGMOID)
-    net.add_layer(3, LINEAR)
-    net.add_layer(4, LINEAR)
-    net.add_layer(1, LINEAR)
+    net = Network(INPUT_SIZE, ETA, SIN)
+    net.add_layer(8, RELU)
+    net.add_layer(8, RELU)
+    net.add_layer(1, SIGMOID)
 
     # Open Training data
     with open(DATA_TRAIN_PATH) as train_data_file, open(DATA_VALID_PATH) as validation_data_file:
